@@ -4,6 +4,40 @@ from django.db import models
 from model_utils.models import TimeFramedModel
 
 
+class PartnerStatusChoices(models.TextChoices):
+    ACTIVE = "ACTIVE", "ACTIVE"
+    INACTIVE = "INACTIVE", "INACTIVE"
+
+
+class Partner(models.Model):
+    name = models.CharField("name", max_length=100)
+    status = models.CharField(
+        "status",
+        max_length=8,
+        choices=PartnerStatusChoices.choices,
+        default=PartnerStatusChoices.ACTIVE,
+    )
+
+    class Meta:
+        """Meta definition for Patner."""
+
+        verbose_name = "Patner"
+        verbose_name_plural = "Patners"
+
+
+class PartnerRoute(models.Model):
+    start_place = models.CharField("start_place", max_length=10)
+    finish_place = models.CharField("finish_place", max_length=10)
+    price = models.DecimalField("price", max_digits=5, decimal_places=2)
+    partner = models.ForeignKey(Partner, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        """Meta definition for PartnerRoute."""
+
+        verbose_name = "PartnerRoute"
+        verbose_name_plural = "PartnerRoutes"
+
+
 class DeliveryStatusChoices(models.TextChoices):
     IN_TRANSIT = "IN_TRANSIT", "IN_TRANSIT"
     DONE = "DONE", "DONE"
@@ -30,7 +64,7 @@ class Delivery(TimeFramedModel):
 
     status = models.CharField(
         "status",
-        max_length=50,
+        max_length=10,
         choices=DeliveryStatusChoices.choices,
         default=DeliveryStatusChoices.IN_TRANSIT,
     )
