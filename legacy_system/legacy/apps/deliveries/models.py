@@ -19,8 +19,6 @@ class Partner(models.Model):
     )
 
     class Meta:
-        """Meta definition for Patner."""
-
         verbose_name = "Patner"
         verbose_name_plural = "Patners"
 
@@ -32,8 +30,6 @@ class PartnerRoute(models.Model):
     partner = models.ForeignKey(Partner, on_delete=models.DO_NOTHING)
 
     class Meta:
-        """Meta definition for PartnerRoute."""
-
         verbose_name = "PartnerRoute"
         verbose_name_plural = "PartnerRoutes"
 
@@ -41,6 +37,11 @@ class PartnerRoute(models.Model):
 class DeliveryStatusChoices(models.TextChoices):
     IN_TRANSIT = "IN_TRANSIT", "IN_TRANSIT"
     DONE = "DONE", "DONE"
+
+
+class DeliveryTypeChoices(models.TextChoices):
+    QUOTATION = "QUOTATION", "QUOTATION"
+    DELIVERY = "DELIVERY", "DELIVERY"
 
 
 class Delivery(TimeFramedModel):
@@ -59,6 +60,10 @@ class Delivery(TimeFramedModel):
 
     expected_delivery_date = models.DateField("expected_delivery_date", auto_now=False, auto_now_add=False)
     delivery_date = models.DateField("delivery_date", auto_now=False, auto_now_add=False, null=True)
+
+    type = models.CharField(
+        "type", max_length=9, choices=DeliveryTypeChoices.choices, default=DeliveryTypeChoices.QUOTATION
+    )
 
     status = models.CharField(
         "status",
