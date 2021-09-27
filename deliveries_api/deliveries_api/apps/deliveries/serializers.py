@@ -22,4 +22,6 @@ class DeliverySerializer(serializers.ModelSerializer):
             "type",
             "status",
             "partner_id",
+            "delivery_entry_created",
+            "delivery_entry_modified",
         ]

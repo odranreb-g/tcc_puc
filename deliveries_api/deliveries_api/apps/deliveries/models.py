@@ -1,7 +1,7 @@
 import uuid
 
 from django.db import models
-from model_utils.models import TimeFramedModel
+from model_utils.models import TimeStampedModel
 
 
 class DeliveryStatusChoices(models.TextChoices):
@@ -14,7 +14,7 @@ class DeliveryTypeChoices(models.TextChoices):
     DELIVERY = "DELIVERY", "DELIVERY"
 
 
-class Delivery(TimeFramedModel):
+class Delivery(TimeStampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     sender_name = models.CharField("sender_name", max_length=100)
     sender_address = models.CharField("sender_address", max_length=100)
@@ -30,6 +30,9 @@ class Delivery(TimeFramedModel):
 
     expected_delivery_date = models.DateField("expected_delivery_date", auto_now=False, auto_now_add=False)
     delivery_date = models.DateField("delivery_date", auto_now=False, auto_now_add=False, null=True)
+
+    delivery_entry_created = models.DateTimeField()
+    delivery_entry_modified = models.DateTimeField()
 
     type = models.CharField(
         "type", max_length=9, choices=DeliveryTypeChoices.choices, default=DeliveryTypeChoices.QUOTATION
