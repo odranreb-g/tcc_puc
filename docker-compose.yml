@@ -14,6 +14,19 @@ services:
       - ./data/legacy_system:/var/lib/postgresql/data
     networks:
       - postgres-compose-network
+  deliveries-api-postgresql:
+    image: postgres:13
+    container_name: "deliveries-api-postgresql"
+    environment:
+      POSTGRES_PASSWORD: "deliveries_api_postgresql"
+      POSTGRES_DB: "deliveries_api"
+      POSTGRES_USER: "deliveries_api"
+    ports:
+      - "25432:5432"
+    volumes:
+      - ./data/deliveries_api:/var/lib/postgresql/data
+    networks:
+      - postgres-compose-network
 
   adminer:
     image: adminer
