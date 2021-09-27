@@ -71,6 +71,7 @@ class Delivery(TimeFramedModel):
         choices=DeliveryStatusChoices.choices,
         default=DeliveryStatusChoices.IN_TRANSIT,
     )
+    partner = models.ForeignKey(Partner, on_delete=models.DO_NOTHING, null=True)
 
     class Meta:
         verbose_name = "Delivery"

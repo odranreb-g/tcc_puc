@@ -42,6 +42,8 @@ class Delivery(TimeFramedModel):
         default=DeliveryStatusChoices.IN_TRANSIT,
     )
 
+    partner_id = models.UUIDField(null=True)
+
     class Meta:
         verbose_name = "Delivery"
         verbose_name_plural = "Deliveries"
