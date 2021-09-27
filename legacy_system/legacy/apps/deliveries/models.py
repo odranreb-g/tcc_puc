@@ -1,7 +1,7 @@
 import uuid
 
 from django.db import models
-from model_utils.models import TimeFramedModel
+from model_utils.models import TimeStampedModel
 
 
 class PartnerStatusChoices(models.TextChoices):
@@ -9,7 +9,7 @@ class PartnerStatusChoices(models.TextChoices):
     INACTIVE = "INACTIVE", "INACTIVE"
 
 
-class Partner(models.Model):
+class Partner(TimeStampedModel):
     name = models.CharField("name", max_length=100)
     status = models.CharField(
         "status",
@@ -23,7 +23,7 @@ class Partner(models.Model):
         verbose_name_plural = "Patners"
 
 
-class PartnerRoute(models.Model):
+class PartnerRoute(TimeStampedModel):
     start_place = models.CharField("start_place", max_length=10)
     finish_place = models.CharField("finish_place", max_length=10)
     price = models.DecimalField("price", max_digits=5, decimal_places=2)
@@ -44,7 +44,7 @@ class DeliveryTypeChoices(models.TextChoices):
     DELIVERY = "DELIVERY", "DELIVERY"
 
 
-class Delivery(TimeFramedModel):
+class Delivery(TimeStampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     sender_name = models.CharField("sender_name", max_length=100)
     sender_address = models.CharField("sender_address", max_length=100)
