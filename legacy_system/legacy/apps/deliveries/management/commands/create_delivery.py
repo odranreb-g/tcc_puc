@@ -17,11 +17,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        qty = options.get("multiples_qty", 1)
+        qty = options.get("multiples_qty") or 1
+
         for index in range(qty):
             DeliveryFactory(
                 freight_price=random.uniform(10, 100),
                 expected_delivery_date=datetime.now() + timedelta(days=random.uniform(1, 30)),
             )
 
-            self.stdout.write(self.style.SUCCESS(f"Delivery created {index} / {qty}"))
+            self.stdout.write(self.style.SUCCESS(f"Delivery created {index + 1} / {qty}"))
