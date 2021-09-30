@@ -1,9 +1,21 @@
 import json
+import logging
+import sys
 
 from kafka import KafkaConsumer
 from prettyconf import config
 
-from zpl_generate import ZPLGenerator
+from handlers import ZPLGeneratorHandler
+
+root = logging.getLogger()
+root.setLevel(logging.INFO)
+
+handler = logging.StreamHandler(sys.stdout)
+handler.setLevel(logging.INFO)
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+handler.setFormatter(formatter)
+root.addHandler(handler)
+
 
 consumer = KafkaConsumer(
     config("KAFKA_TOPIC"),
@@ -12,9 +24,8 @@ consumer = KafkaConsumer(
     value_deserializer=lambda m: json.loads(m.decode("ascii")),
 )
 
-zpl_generator = ZPLGenerator()
+handler = ZPLGeneratorHandler()
+
 if __name__ == "__main__":
     for message in consumer:
-        path = zpl_generator.process(message.value.get("id"))
-        # TODO UPDATE DELIVERY WITH ZPL
-        print(path)
+        handler.process(message.value.get("id"))

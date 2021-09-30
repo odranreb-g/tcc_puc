@@ -34,7 +34,7 @@ def delivies_pooling():
             if response.status_code == HTTPStatus.CREATED:
                 print(f"{index+1}/{len(objs)} -> OK")
             else:
-                print(f"{index+1}/{len(objs)} -> FAIL")
+                print(f"{index+1}/{len(objs)} -> FAIL {response.json()}")
 
     except requests.exceptions.ConnectionError as error:
         logger.error(f"Error {error!r}")

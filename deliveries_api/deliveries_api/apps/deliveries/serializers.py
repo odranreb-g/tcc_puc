@@ -1,9 +1,17 @@
 from rest_framework import serializers
 
-from apps.deliveries.models import Delivery
+from apps.deliveries.models import ZPL, Delivery
+
+
+class ZPLSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ZPL
+        fields = ["url"]
 
 
 class DeliverySerializer(serializers.ModelSerializer):
+    zpl = ZPLSerializer(allow_null=True, required=False)
+
     class Meta:
         model = Delivery
         fields = [
@@ -24,4 +32,25 @@ class DeliverySerializer(serializers.ModelSerializer):
             "partner_id",
             "delivery_entry_created",
             "delivery_entry_modified",
+            "zpl",
         ]
+
+    def create(self, validated_data):
+        validated_data.pop("zpl", None)
+        delivery = Delivery.objects.create(**validated_data)
+        return delivery
+
+    def update(self, instance, validated_data):
+        print(validated_data)
+        zpl = validated_data.pop("zpl", None)
+        if 1 == 1 and zpl:  # ZPL GENERATOR STATUS
+
+            if instance.zpl is None:
+                instance.zpl = ZPL.objects.create(**zpl)
+            else:
+                instance.zpl.url = zpl.get("url")
+                instance.zpl.save()
+
+        instance.save()
+
+        return instance

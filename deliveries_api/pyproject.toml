@@ -12,6 +12,7 @@ django-model-utils = "^4.1.1"
 psycopg2 = "^2.9.1"
 prettyconf = "^2.2.1"
 kafka-python = "^2.0.2"
+django-simple-history = "^3.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

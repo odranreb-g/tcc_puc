@@ -1,12 +1,23 @@
-import json
 import logging
 import uuid
 
 from deliveries_api.kafka_config import kafka_producer
 from django.db import models
 from model_utils.models import TimeStampedModel
+from simple_history.models import HistoricalRecords
 
 logger = logging.getLogger(__name__)
+
+
+class ZPL(TimeStampedModel):
+    url = models.URLField("URL", max_length=200, unique=True)
+    history = HistoricalRecords()
+
+    class Meta:
+        """Meta definition for ZPL."""
+
+        verbose_name = "ZPL"
+        verbose_name_plural = "ZPLs"
 
 
 class DeliveryStatusChoices(models.TextChoices):
@@ -52,6 +63,10 @@ class Delivery(TimeStampedModel):
     )
 
     partner_id = models.UUIDField(null=True)
+
+    history = HistoricalRecords()
+
+    zpl = models.OneToOneField(ZPL, on_delete=models.CASCADE, null=True, unique=True)
 
     class Meta:
         verbose_name = "Delivery"
