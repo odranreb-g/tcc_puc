@@ -1,17 +1,15 @@
 [tool.poetry]
-name = "deliveries_api"
+name = "zpl_generate_service"
 version = "0.1.0"
 description = ""
 authors = ["Bernardo Gomes <bgomesdeabreu@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "3.9.7"
-Django = "^3.2.7"
-djangorestframework = "^3.12.4"
-django-model-utils = "^4.1.1"
-psycopg2 = "^2.9.1"
 prettyconf = "^2.2.1"
 kafka-python = "^2.0.2"
+simple-zpl2 = "^0.3.0"
+Pillow = "^8.3.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

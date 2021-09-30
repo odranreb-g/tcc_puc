@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 
 services:
   legacy-system-postgresql:
@@ -27,7 +27,6 @@ services:
       - ./data/deliveries_api:/var/lib/postgresql/data
     networks:
       - postgres-compose-network
-
   adminer:
     image: adminer
     restart: always
@@ -35,6 +34,32 @@ services:
       - 8080:8080
     networks:
       - postgres-compose-network
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.4.5
+    hostname: zookeeper
+    container_name: zookeeper-tcc
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+  kafka1:
+    image: confluentinc/cp-kafka:5.4.5
+    hostname: kafka1
+    container_name: kafka1-tcc
+    depends_on:
+      - zookeeper
+    ports:
+      - "19092:19092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092,PLAINTEXT_HOST://localhost:19092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
 networks:
   postgres-compose-network:

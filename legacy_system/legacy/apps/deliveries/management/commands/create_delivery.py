@@ -1,4 +1,5 @@
 import random
+import time
 from datetime import datetime, timedelta
 
 from django.core.management.base import BaseCommand
@@ -26,3 +27,4 @@ class Command(BaseCommand):
             )
 
             self.stdout.write(self.style.SUCCESS(f"Delivery created {index + 1} / {qty}"))
+            time.sleep(1)

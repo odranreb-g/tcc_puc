@@ -1,10 +1,16 @@
+import json
+import logging
 import uuid
 
+from deliveries_api.kafka_config import kafka_producer
 from django.db import models
 from model_utils.models import TimeStampedModel
 
+logger = logging.getLogger(__name__)
+
 
 class DeliveryStatusChoices(models.TextChoices):
+    QUOTATION = "QUOTATION", "QUOTATION"
     IN_TRANSIT = "IN_TRANSIT", "IN_TRANSIT"
     DONE = "DONE", "DONE"
 
@@ -42,7 +48,7 @@ class Delivery(TimeStampedModel):
         "status",
         max_length=10,
         choices=DeliveryStatusChoices.choices,
-        default=DeliveryStatusChoices.IN_TRANSIT,
+        default=DeliveryStatusChoices.QUOTATION,
     )
 
     partner_id = models.UUIDField(null=True)
@@ -50,3 +56,9 @@ class Delivery(TimeStampedModel):
     class Meta:
         verbose_name = "Delivery"
         verbose_name_plural = "Deliveries"
+
+    def save(self, *args, **kwargs):
+        super(Delivery, self).save(*args, **kwargs)
+        topic = f"{self.__class__.__name__.lower()}_{self.status.lower()}"
+        kafka_producer.send(topic, {"id": str(self.id)})
+        logger.info(f"Delivery {self.id} sent to topic {topic}.")

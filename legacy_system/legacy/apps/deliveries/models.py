@@ -35,6 +35,7 @@ class PartnerRoute(TimeStampedModel):
 
 
 class DeliveryStatusChoices(models.TextChoices):
+    QUOTATION = "QUOTATION", "QUOTATION"
     IN_TRANSIT = "IN_TRANSIT", "IN_TRANSIT"
     DONE = "DONE", "DONE"
 
@@ -69,7 +70,7 @@ class Delivery(TimeStampedModel):
         "status",
         max_length=10,
         choices=DeliveryStatusChoices.choices,
-        default=DeliveryStatusChoices.IN_TRANSIT,
+        default=DeliveryStatusChoices.QUOTATION,
     )
     partner = models.ForeignKey(Partner, on_delete=models.DO_NOTHING, null=True)
 

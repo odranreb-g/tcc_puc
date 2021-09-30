@@ -138,3 +138,6 @@ dmypy.json
 cython_debug/
 
 data/
+
+.python-version
+zpl_generate_service/zpls/*.png
