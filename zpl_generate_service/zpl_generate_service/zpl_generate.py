@@ -38,7 +38,7 @@ class ZPLGenerator:
         img.save(path)
 
         if save_s3:
-            ...
+            ...  # TODO save to s3
         else:
             path = f"https://p1uc-tcc-bernardo.com/zpls/{uuid}"
 

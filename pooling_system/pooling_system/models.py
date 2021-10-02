@@ -49,4 +49,30 @@ class Delivery(Base, SerializerMixin):
         return dict
 
 
+class Route(Base, SerializerMixin):
+    __tablename__ = "deliveries_partnerroute"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+
+    start_place = Column(String(50))
+    finish_place = Column(String(50))
+    price = Column(Float(precision=2))
+    status = Column(String(10))
+    partner_id = Column(UUID(as_uuid=True), nullable=True)
+
+    created = Column(DateTime)
+    modified = Column(DateTime)
+
+    def to_dict(self, *args, **kwargs):
+        dict = super().to_dict()
+
+        dict["route_entry_created"] = dict["created"]
+        dict["route_entry_modified"] = dict["modified"]
+
+        del dict["created"]
+        del dict["modified"]
+
+        return dict
+
+
 Base.metadata.create_all(engine)

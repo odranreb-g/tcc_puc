@@ -10,6 +10,7 @@ class PartnerStatusChoices(models.TextChoices):
 
 
 class Partner(TimeStampedModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField("name", max_length=100)
     status = models.CharField(
         "status",
@@ -23,11 +24,23 @@ class Partner(TimeStampedModel):
         verbose_name_plural = "Patners"
 
 
+class RouteStatusChoices(models.TextChoices):
+    ACTIVE = "ACTIVE", "ACTIVE"
+    INACTIVE = "INACTIVE", "INACTIVE"
+
+
 class PartnerRoute(TimeStampedModel):
-    start_place = models.CharField("start_place", max_length=10)
-    finish_place = models.CharField("finish_place", max_length=10)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    start_place = models.CharField("start_place", max_length=50)
+    finish_place = models.CharField("finish_place", max_length=50)
     price = models.DecimalField("price", max_digits=5, decimal_places=2)
     partner = models.ForeignKey(Partner, on_delete=models.DO_NOTHING)
+    status = models.CharField(
+        "status",
+        max_length=10,
+        choices=RouteStatusChoices.choices,
+        default=RouteStatusChoices.ACTIVE,
+    )
 
     class Meta:
         verbose_name = "PartnerRoute"

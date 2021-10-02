@@ -33,3 +33,10 @@ class DeliveryFactory(factory.django.DjangoModelFactory):
     receiver_city = factory.Iterator(CITIES_SHUFFLED)
     receiver_postal_code = factory.Faker("postcode")
     receiver_name = factory.Faker("name")
+
+
+class PartnerFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = "deliveries.Partner"
+
+    name = factory.Faker("name")

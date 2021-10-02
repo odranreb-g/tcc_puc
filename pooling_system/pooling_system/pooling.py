@@ -1,5 +1,6 @@
 import logging
 import time
+from abc import ABC, abstractmethod
 from http import HTTPStatus
 
 import requests
@@ -8,41 +9,102 @@ from sqlalchemy import func
 from sqlalchemy.orm import sessionmaker
 
 from database import engine
-from models import Delivery
+from models import Delivery, Route
 
 logger = logging.getLogger(__name__)
 
 
-def delivies_pooling():
-    try:
-        response = requests.get(
-            f"{config('DELIVERIES_API')}/deliveries/",
-            params={"ordering": "-delivery_entry_created", "limit": 1},
-        ).json()
+class PoolingBase(ABC):
+    def __init__(self, session_maker):
+        self.session_maker = session_maker
 
-        Session = sessionmaker(bind=engine)
-        with Session() as session:
-            query = session.query(Delivery)
-            if response:
-                created = response["results"][0]["delivery_entry_created"]
-                query = query.filter(func.date_trunc("second", Delivery.created) > created)
+    @abstractmethod
+    def get_last_entity(self):
+        ...
 
-            objs = query.all()
+    @abstractmethod
+    def get_data_from_database(self, date):
+        ...
 
+    def process(self):
+        try:
+            last_date = self.get_last_entity()
+            objs = self.get_data_from_database(last_date)
+            self.send_to_new_api(objs)
+        except requests.exceptions.ConnectionError as error:
+            logger.error(f"Error {error!r}")
+
+    def send_to_new_api(self, objs):
         for index, obj in enumerate(objs):
-            response = requests.post(f"{config('DELIVERIES_API')}/deliveries/", data=obj.to_dict())
+            response = requests.post(self.URL, data=obj.to_dict())
             if response.status_code == HTTPStatus.CREATED:
                 print(f"{index+1}/{len(objs)} -> OK")
             else:
                 print(f"{index+1}/{len(objs)} -> FAIL {response.json()}")
 
-    except requests.exceptions.ConnectionError as error:
-        logger.error(f"Error {error!r}")
+
+class DeliveriesPooling(PoolingBase):
+    URL = f"{config('DELIVERIES_API')}/deliveries/"
+
+    def get_last_entity(self):
+        response = requests.get(
+            self.URL,
+            params={"ordering": "-delivery_entry_created", "limit": 1},
+        ).json()
+
+        if response["results"]:
+            return response["results"][0]["delivery_entry_created"]
+        else:
+            return ""
+
+    def get_data_from_database(self, date):
+        with self.session_maker() as session:
+            query = session.query(Delivery)
+            if date:
+                created = date
+                query = query.filter(func.date_trunc("second", Delivery.created) > created)
+
+            return query.all()
+
+    def send_to_new_api(self, objs):
+        for index, obj in enumerate(objs):
+            response = requests.post(self.URL, data=obj.to_dict())
+            if response.status_code == HTTPStatus.CREATED:
+                print(f"{index+1}/{len(objs)} -> OK")
+            else:
+                print(f"{index+1}/{len(objs)} -> FAIL {response.json()}")
+
+
+class PartnerRoutesPooling(PoolingBase):
+    URL = f"{config('PARTNER_ROUTES_API')}/routes/"
+
+    def get_last_entity(self):
+        response = requests.get(
+            self.URL,
+            params={"ordering": "-route_entry_modified", "limit": 1},
+        ).json()
+
+        if response["results"]:
+            return response["results"][0]["route_entry_modified"]
+        else:
+            return ""
+
+    def get_data_from_database(self, date):
+        with self.session_maker() as session:
+            query = session.query(Route)
+            if date:
+                updated = date
+                query = query.filter(func.date_trunc("second", Route.modified) > updated)
+
+        return query.all()
 
 
 def pooling():
+    session_maker = sessionmaker(bind=engine)
+    poolings = [DeliveriesPooling(session_maker), PartnerRoutesPooling(session_maker)]
     while True:
         print("starting pooling")
-        delivies_pooling()
+        for pooling in poolings:
+            pooling.process()
         print("finished pooling")
         time.sleep(10)

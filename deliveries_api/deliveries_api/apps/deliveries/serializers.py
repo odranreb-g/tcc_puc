@@ -41,7 +41,6 @@ class DeliverySerializer(serializers.ModelSerializer):
         return delivery
 
     def update(self, instance, validated_data):
-        print(validated_data)
         zpl = validated_data.pop("zpl", None)
         if 1 == 1 and zpl:  # ZPL GENERATOR STATUS
 

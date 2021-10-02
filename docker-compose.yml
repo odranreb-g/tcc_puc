@@ -27,6 +27,19 @@ services:
       - ./data/deliveries_api:/var/lib/postgresql/data
     networks:
       - postgres-compose-network
+  partner-routes-api-postgresql:
+    image: postgres:13
+    container_name: "partner-routes-api-postgresql"
+    environment:
+      POSTGRES_PASSWORD: "partner-routes-api-postgresql"
+      POSTGRES_DB: "partner-routes-api"
+      POSTGRES_USER: "partner-routes-api"
+    ports:
+      - "35432:5432"
+    volumes:
+      - ./data/partner_routes_api:/var/lib/postgresql/data
+    networks:
+      - postgres-compose-network
   adminer:
     image: adminer
     restart: always
