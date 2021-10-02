@@ -1,3 +1,4 @@
+import http
 import json
 import logging
 import time
@@ -38,8 +39,16 @@ class PoolingBase(ABC):
 
     def send_to_new_api(self, objs):
         for index, obj in enumerate(objs):
-            response = requests.post(self.URL, data=obj.to_dict())
-            if response.status_code == HTTPStatus.CREATED:
+            if obj.created == obj.modified:
+                response = requests.post(self.URL, data=obj.to_dict(), headers={"x-pooling-system": "true"})
+            else:
+                response = requests.patch(
+                    f"{self.URL}{obj.id}/",
+                    data=obj.to_dict(),
+                    headers={"x-pooling-system": "True"},
+                )
+
+            if response.status_code in [HTTPStatus.CREATED, HTTPStatus.OK]:
                 print(f"{index+1}/{len(objs)} -> OK")
             else:
                 print(f"{index+1}/{len(objs)} -> FAIL {response.json()}")
@@ -51,11 +60,11 @@ class DeliveriesPooling(PoolingBase):
     def get_last_entity(self):
         response = requests.get(
             self.URL,
-            params={"ordering": "-delivery_entry_created", "limit": 1},
+            params={"ordering": "-delivery_entry_modified", "limit": 1},
         ).json()
 
         if response["results"]:
-            return response["results"][0]["delivery_entry_created"]
+            return response["results"][0]["delivery_entry_modified"]
         else:
             return ""
 
@@ -63,18 +72,10 @@ class DeliveriesPooling(PoolingBase):
         with self.session_maker() as session:
             query = session.query(Delivery)
             if date:
-                created = date
-                query = query.filter(func.date_trunc("second", Delivery.created) > created)
+                modified = date
+                query = query.filter(func.date_trunc("second", Delivery.modified) > modified)
 
             return query.all()
-
-    def send_to_new_api(self, objs):
-        for index, obj in enumerate(objs):
-            response = requests.post(self.URL, data=obj.to_dict())
-            if response.status_code == HTTPStatus.CREATED:
-                print(f"{index+1}/{len(objs)} -> OK")
-            else:
-                print(f"{index+1}/{len(objs)} -> FAIL {response.json()}")
 
 
 class PartnerRoutesPooling(PoolingBase):

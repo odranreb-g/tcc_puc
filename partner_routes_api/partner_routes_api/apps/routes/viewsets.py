@@ -19,7 +19,9 @@ class RouteViewSet(viewsets.ModelViewSet):
 
     queryset = Route.objects.all()
     serializer_class = RouteSerializer
-    filter_backends = [OrderingFilter]
     ordering_fields = ["route_entry_modified"]
-    filter_backends = (filters.DjangoFilterBackend,)
+    filter_backends = (
+        OrderingFilter,
+        filters.DjangoFilterBackend,
+    )
     filterset_class = RouteFilter

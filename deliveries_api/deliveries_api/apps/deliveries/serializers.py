@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.deliveries.models import ZPL, Delivery
+from apps.deliveries.models import ZPL, Delivery, DeliveryStatusChoices
 
 
 class ZPLSerializer(serializers.ModelSerializer):
@@ -42,17 +42,27 @@ class DeliverySerializer(serializers.ModelSerializer):
         return delivery
 
     def update(self, instance, validated_data):
-        zpl = validated_data.pop("zpl", None)
-        if 1 == 1 and zpl:  # ZPL GENERATOR STATUS
+        if "X-Pooling-System" in self.context["request"].headers:
+            if validated_data["status"] == DeliveryStatusChoices.IN_TRANSIT.name:
+                instance.status = DeliveryStatusChoices.PLP_PROCESS
+            instance.delivery_entry_modified = validated_data.get("delivery_entry_modified")
+            instance.save()
+            return instance
 
+        zpl = validated_data.pop("zpl", None)
+
+        if instance.status == DeliveryStatusChoices.PLP_PROCESS.name and zpl:
             if instance.zpl is None:
                 instance.zpl = ZPL.objects.create(**zpl)
             else:
                 instance.zpl.url = zpl.get("url")
                 instance.zpl.save()
 
-        instance.freight_price = validated_data.get("freight_price")
-        instance.partner_route_id = validated_data.get("partner_route_id")
+        if instance.status == DeliveryStatusChoices.QUOTATION:
+            instance.freight_price = validated_data.get("freight_price")
+            instance.partner_route_id = validated_data.get("partner_route_id")
+
+        instance.status = validated_data.get("status", instance.status)
         instance.save()
 
         return instance

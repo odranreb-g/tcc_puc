@@ -23,6 +23,8 @@ class ZPL(TimeStampedModel):
 class DeliveryStatusChoices(models.TextChoices):
     QUOTATION = "QUOTATION", "QUOTATION"
     IN_TRANSIT = "IN_TRANSIT", "IN_TRANSIT"
+    PLP_PROCESS = "PLP_PROCESS", "PLP_PROCESS"
+    ANOTHER_PROCESS = "ANOTHER_PROCESS", "ANOTHER_PROCESS"
     DONE = "DONE", "DONE"
 
 
@@ -57,7 +59,7 @@ class Delivery(TimeStampedModel):
 
     status = models.CharField(
         "status",
-        max_length=10,
+        max_length=15,
         choices=DeliveryStatusChoices.choices,
         default=DeliveryStatusChoices.QUOTATION,
     )
