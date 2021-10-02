@@ -43,7 +43,7 @@ class Delivery(TimeStampedModel):
     receiver_city = models.CharField("receiver_city", max_length=50)
     receiver_postal_code = models.CharField("receiver_postal_code", max_length=10)
 
-    freight_price = models.DecimalField("freight_price", max_digits=5, decimal_places=2)
+    freight_price = models.DecimalField("freight_price", max_digits=5, decimal_places=2, null=True)
 
     expected_delivery_date = models.DateField("expected_delivery_date", auto_now=False, auto_now_add=False)
     delivery_date = models.DateField("delivery_date", auto_now=False, auto_now_add=False, null=True)
@@ -62,7 +62,7 @@ class Delivery(TimeStampedModel):
         default=DeliveryStatusChoices.QUOTATION,
     )
 
-    partner_id = models.UUIDField(null=True)
+    partner_route_id = models.UUIDField(null=True)
 
     history = HistoricalRecords()
 
@@ -74,6 +74,8 @@ class Delivery(TimeStampedModel):
 
     def save(self, *args, **kwargs):
         super(Delivery, self).save(*args, **kwargs)
-        topic = f"{self.__class__.__name__.lower()}_{self.status.lower()}"
-        kafka_producer.send(topic, {"id": str(self.id)})
-        logger.info(f"Delivery {self.id} sent to topic {topic}.")
+
+        if self.history.last().status != self.status or self.history.count() == 1:
+            topic = f"{self.__class__.__name__.lower()}_{self.status.lower()}"
+            kafka_producer.send(topic, {"id": str(self.id)})
+            logger.info(f"Delivery {self.id} sent to topic {topic}.")

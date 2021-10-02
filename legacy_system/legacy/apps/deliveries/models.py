@@ -70,7 +70,7 @@ class Delivery(TimeStampedModel):
     receiver_city = models.CharField("receiver_city", max_length=50)
     receiver_postal_code = models.CharField("receiver_postal_code", max_length=10)
 
-    freight_price = models.DecimalField("freight_price", max_digits=5, decimal_places=2)
+    freight_price = models.DecimalField("freight_price", max_digits=5, decimal_places=2, null=True)
 
     expected_delivery_date = models.DateField("expected_delivery_date", auto_now=False, auto_now_add=False)
     delivery_date = models.DateField("delivery_date", auto_now=False, auto_now_add=False, null=True)
@@ -85,7 +85,7 @@ class Delivery(TimeStampedModel):
         choices=DeliveryStatusChoices.choices,
         default=DeliveryStatusChoices.QUOTATION,
     )
-    partner = models.ForeignKey(Partner, on_delete=models.DO_NOTHING, null=True)
+    partner_route = models.ForeignKey(PartnerRoute, on_delete=models.DO_NOTHING, null=True)
 
     class Meta:
         verbose_name = "Delivery"

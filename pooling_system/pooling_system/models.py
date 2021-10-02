@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Column, Date, DateTime, Float, Integer, String
+from sqlalchemy import Column, Date, DateTime, Float, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_serializer import SerializerMixin
@@ -32,7 +32,7 @@ class Delivery(Base, SerializerMixin):
 
     type = Column(String(9))
     status = Column(String(10))
-    partner_id = Column(UUID(as_uuid=True), nullable=True)
+    partner_route_id = Column(UUID(as_uuid=True), nullable=True)
 
     created = Column(DateTime)
     modified = Column(DateTime)

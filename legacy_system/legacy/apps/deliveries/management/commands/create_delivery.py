@@ -21,10 +21,9 @@ class Command(BaseCommand):
         qty = options.get("multiples_qty") or 1
 
         for index in range(qty):
-            DeliveryFactory(
-                freight_price=random.uniform(10, 100),
+            delivery = DeliveryFactory(
                 expected_delivery_date=datetime.now() + timedelta(days=random.uniform(1, 30)),
             )
 
-            self.stdout.write(self.style.SUCCESS(f"Delivery created {index + 1} / {qty}"))
+            self.stdout.write(self.style.SUCCESS(f"Delivery {delivery.id} created {index + 1} / {qty}"))
             time.sleep(1)

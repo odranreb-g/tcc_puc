@@ -19,6 +19,9 @@ class City(TimeStampedModel):
         self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
 
+    def __str__(self):
+        return self.name
+
 
 class RouteStatusChoices(models.TextChoices):
     ACTIVE = "ACTIVE", "ACTIVE"

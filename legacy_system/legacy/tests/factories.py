@@ -39,4 +39,4 @@ class PartnerFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = "deliveries.Partner"
 
-    name = factory.Faker("name")
+    name = factory.Faker("company")

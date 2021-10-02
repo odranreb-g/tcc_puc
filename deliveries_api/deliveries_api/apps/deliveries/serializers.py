@@ -10,6 +10,7 @@ class ZPLSerializer(serializers.ModelSerializer):
 
 
 class DeliverySerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField()
     zpl = ZPLSerializer(allow_null=True, required=False)
 
     class Meta:
@@ -29,7 +30,7 @@ class DeliverySerializer(serializers.ModelSerializer):
             "delivery_date",
             "type",
             "status",
-            "partner_id",
+            "partner_route_id",
             "delivery_entry_created",
             "delivery_entry_modified",
             "zpl",
@@ -50,6 +51,8 @@ class DeliverySerializer(serializers.ModelSerializer):
                 instance.zpl.url = zpl.get("url")
                 instance.zpl.save()
 
+        instance.freight_price = validated_data.get("freight_price")
+        instance.partner_route_id = validated_data.get("partner_route_id")
         instance.save()
 
         return instance

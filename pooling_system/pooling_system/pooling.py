@@ -1,3 +1,4 @@
+import json
 import logging
 import time
 from abc import ABC, abstractmethod
@@ -28,6 +29,7 @@ class PoolingBase(ABC):
 
     def process(self):
         try:
+            logger.info(f"Pooling {self.__class__.__name__.lower()}")
             last_date = self.get_last_entity()
             objs = self.get_data_from_database(last_date)
             self.send_to_new_api(objs)
@@ -102,9 +104,13 @@ class PartnerRoutesPooling(PoolingBase):
 def pooling():
     session_maker = sessionmaker(bind=engine)
     poolings = [DeliveriesPooling(session_maker), PartnerRoutesPooling(session_maker)]
+    poolings = [DeliveriesPooling(session_maker)]
     while True:
-        print("starting pooling")
-        for pooling in poolings:
-            pooling.process()
-        print("finished pooling")
-        time.sleep(10)
+        try:
+            print("starting pooling")
+            for pooling in poolings:
+                pooling.process()
+            print("finished pooling")
+            time.sleep(10)
+        except json.decoder.JSONDecodeError as error:
+            logger.error(f"error {error}")
