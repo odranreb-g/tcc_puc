@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.routes.models import City, Route
+from apps.routes.models import City, NewRouteCreatedByPartner, Route
 
 
 class CitySerializer(serializers.ModelSerializer):
@@ -38,3 +38,16 @@ class RouteSerializer(serializers.ModelSerializer):
         )
 
         return route
+
+
+class NewRouteCreatedByPartnerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewRouteCreatedByPartner
+        fields = [
+            "id",
+            "price",
+            "start_place",
+            "finish_place",
+            "partner_id",
+            "status",
+        ]

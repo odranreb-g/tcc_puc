@@ -1,6 +1,4 @@
 import random
-import time
-from datetime import datetime, timedelta
 
 from apps.deliveries.models import PartnerRoute
 from django.core.management.base import BaseCommand

@@ -1,4 +1,5 @@
-from pooling import pooling
+from pooling import PoolingExecuter
 
 if __name__ == "__main__":
-    pooling()
+    pooling = PoolingExecuter()
+    pooling.process()

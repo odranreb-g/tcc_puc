@@ -45,6 +45,7 @@ class PartnerRoute(TimeStampedModel):
     class Meta:
         verbose_name = "PartnerRoute"
         verbose_name_plural = "PartnerRoutes"
+        unique_together = [["start_place", "finish_place", "partner_id"]]
 
 
 class DeliveryStatusChoices(models.TextChoices):

@@ -80,4 +80,5 @@ class Delivery(TimeStampedModel):
         if self.history.last().status != self.status or self.history.count() == 1:
             topic = f"{self.__class__.__name__.lower()}_{self.status.lower()}"
             kafka_producer.send(topic, {"id": str(self.id)})
+            kafka_producer.flush()
             logger.info(f"Delivery {self.id} sent to topic {topic}.")

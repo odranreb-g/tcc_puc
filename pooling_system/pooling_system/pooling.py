@@ -1,4 +1,3 @@
-import http
 import json
 import logging
 import time
@@ -17,8 +16,12 @@ logger = logging.getLogger(__name__)
 
 
 class PoolingBase(ABC):
+    _URL = None
+    _CLASS_REF = None
+    _FIELD_REF = None
+
     def __init__(self, session_maker):
-        self.session_maker = session_maker
+        self._session_maker = session_maker
 
     @abstractmethod
     def get_last_entity(self):
@@ -69,7 +72,7 @@ class DeliveriesPooling(PoolingBase):
             return ""
 
     def get_data_from_database(self, date):
-        with self.session_maker() as session:
+        with self._session_maker() as session:
             query = session.query(Delivery)
             if date:
                 modified = date
@@ -93,25 +96,27 @@ class PartnerRoutesPooling(PoolingBase):
             return ""
 
     def get_data_from_database(self, date):
-        with self.session_maker() as session:
+        with self._session_maker() as session:
             query = session.query(Route)
             if date:
                 updated = date
                 query = query.filter(func.date_trunc("second", Route.modified) > updated)
+            objs = query.all()
+        return objs
 
-        return query.all()
 
+class PoolingExecuter:
+    _poolings = [DeliveriesPooling, PartnerRoutesPooling]
+    _session_maker = sessionmaker(bind=engine)
 
-def pooling():
-    session_maker = sessionmaker(bind=engine)
-    poolings = [DeliveriesPooling(session_maker), PartnerRoutesPooling(session_maker)]
-    poolings = [DeliveriesPooling(session_maker)]
-    while True:
-        try:
-            print("starting pooling")
-            for pooling in poolings:
-                pooling.process()
-            print("finished pooling")
-            time.sleep(10)
-        except json.decoder.JSONDecodeError as error:
-            logger.error(f"error {error}")
+    def process(self):
+        self._poolings = [pooling(self._session_maker) for pooling in self._poolings]
+        while True:
+            try:
+                print("starting pooling")
+                for pooling in self._poolings:
+                    pooling.process()
+                print("finished pooling")
+                time.sleep(10)
+            except json.decoder.JSONDecodeError as error:
+                logger.error(f"error {error}")

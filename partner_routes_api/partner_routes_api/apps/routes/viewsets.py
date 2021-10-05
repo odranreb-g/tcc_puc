@@ -2,8 +2,8 @@ from django_filters import rest_framework as filters
 from rest_framework import viewsets
 from rest_framework.filters import OrderingFilter
 
-from apps.routes.models import Route
-from apps.routes.serializers import RouteSerializer
+from apps.routes.models import NewRouteCreatedByPartner, Route
+from apps.routes.serializers import NewRouteCreatedByPartnerSerializer, RouteSerializer
 
 
 class RouteFilter(filters.FilterSet):
@@ -25,3 +25,9 @@ class RouteViewSet(viewsets.ModelViewSet):
         filters.DjangoFilterBackend,
     )
     filterset_class = RouteFilter
+
+
+class NewRouteCreatedByPartnerViewSet(viewsets.ModelViewSet):
+
+    queryset = NewRouteCreatedByPartner.objects.all()
+    serializer_class = NewRouteCreatedByPartnerSerializer

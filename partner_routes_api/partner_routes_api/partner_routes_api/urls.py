@@ -21,6 +21,7 @@ from rest_framework.routers import DefaultRouter
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
 router.register(r"routes", viewsets.RouteViewSet)
+router.register(r"new-routes", viewsets.NewRouteCreatedByPartnerViewSet)
 
 
 # The API URLs are now determined automatically by the router.
