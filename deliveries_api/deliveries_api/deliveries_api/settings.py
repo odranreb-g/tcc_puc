@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "simple_history",
+    "django_extensions",
     "apps.deliveries.apps.DeliveriesConfig",
 ]
 
@@ -136,4 +137,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 20,
+}
+
+GRAPH_MODELS = {
+    "app_labels": ["deliveries"],
 }

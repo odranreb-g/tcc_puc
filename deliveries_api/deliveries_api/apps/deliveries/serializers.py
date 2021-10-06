@@ -28,7 +28,6 @@ class DeliverySerializer(serializers.ModelSerializer):
             "freight_price",
             "expected_delivery_date",
             "delivery_date",
-            "type",
             "status",
             "partner_route_id",
             "delivery_entry_created",

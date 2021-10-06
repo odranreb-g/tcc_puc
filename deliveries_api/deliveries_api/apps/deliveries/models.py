@@ -28,11 +28,6 @@ class DeliveryStatusChoices(models.TextChoices):
     DONE = "DONE", "DONE"
 
 
-class DeliveryTypeChoices(models.TextChoices):
-    QUOTATION = "QUOTATION", "QUOTATION"
-    DELIVERY = "DELIVERY", "DELIVERY"
-
-
 class Delivery(TimeStampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     sender_name = models.CharField("sender_name", max_length=100)
@@ -52,10 +47,6 @@ class Delivery(TimeStampedModel):
 
     delivery_entry_created = models.DateTimeField()
     delivery_entry_modified = models.DateTimeField()
-
-    type = models.CharField(
-        "type", max_length=9, choices=DeliveryTypeChoices.choices, default=DeliveryTypeChoices.QUOTATION
-    )
 
     status = models.CharField(
         "status",
