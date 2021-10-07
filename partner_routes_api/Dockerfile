@@ -19,8 +19,13 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock /app/
 RUN poetry config virtualenvs.create false && poetry install --no-dev
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends graphviz \
+    && rm -rf /var/lib/apt/lists/* \
+    && poetry add pyparsing pydot 
+
 ADD . /app/
 
 EXPOSE 8000
 
-ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:8000", "-c", "gunicorn_config.py", "--chdir", "deliveries_api", "deliveries_api.wsgi:application", "--graceful-timeout", "30"]
+ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:8000", "-c", "gunicorn_config.py", "--chdir", "partner_routes_api", "partner_routes_api.wsgi:application", "--graceful-timeout", "30"]

@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_filters",
     "simple_history",
+    "django_extensions",
+    "drf_yasg",
     "apps.routes.apps.RoutesConfig",
 ]
 
@@ -137,4 +139,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 20,
+}
+
+GRAPH_MODELS = {
+    "app_labels": ["routes"],
 }

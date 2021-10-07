@@ -16,12 +16,32 @@ Including another URLconf
 from apps.deliveries import viewsets
 from django.contrib import admin
 from django.urls import include, path
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
 router.register(r"deliveries", viewsets.DeliveryViewSet)
 
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Deliveries API",
+        default_version="v1",
+        description="Deliveries API - TFC PCC",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="bgomesdeabreu@gmail.com"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
 
 # The API URLs are now determined automatically by the router.
-urlpatterns = [path("admin/", admin.site.urls), path("", include(router.urls))]
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
+    path("", include(router.urls)),
+]
