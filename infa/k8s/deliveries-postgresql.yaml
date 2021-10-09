@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-deliveries-api-pvc
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-deliveries-api-local-storage
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/k8s/deliveries_api"
+    type: DirectoryOrCreate
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deliveries-api
+spec:
+  selector:
+    matchLabels:
+      app: postgres-deliveries-api
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres-deliveries-api
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:13
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: "deliveries_api"
+            - name: POSTGRES_USER
+              value: "deliveries_api"
+            - name: POSTGRES_PASSWORD
+              value: "deliveries_api_postgresql"
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgresdb
+      volumes:
+        - name: postgresdb
+          persistentVolumeClaim:
+            claimName: postgres-deliveries-api-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: postgres-deliveries-api
+spec:
+  selector:
+    app: postgres-deliveries-api
+  ports:
+    - port: 5432
+  type: ClusterIP

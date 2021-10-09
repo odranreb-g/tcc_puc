@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django import urls
 from apps.deliveries import viewsets
 from django.contrib import admin
 from django.urls import include, path
@@ -39,9 +40,17 @@ schema_view = get_schema_view(
 )
 
 # The API URLs are now determined automatically by the router.
-urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
-    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
-    path("", include(router.urls)),
-]
+
+urlpatterns = []
+
+for prefix in ["", "deliveries-api/"]:
+    urlpatterns.extend(
+        [
+            path(f"{prefix}admin/", admin.site.urls),
+            path(
+                f"{prefix}swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"
+            ),
+            path(f"{prefix}redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
+            path(f"{prefix}", include(router.urls)),
+        ]
+    )

@@ -1,5 +1,41 @@
 # Project
 
+## KubeCtl
+
+### Instalation
+
+https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+
+## Kind - K8S - Cluster
+
+### Instalation
+
+The (link)[https://kind.sigs.k8s.io/docs/user/quick-start#installation] to install.
+
+The following code has a path to /usr/local/bin you should change this to local present in your path.
+
+```bash
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.11.1/kind-linux-amd64
+chmod +x ./kind
+sudo mv ./kind /usr/local/bin/kind
+```
+
+### Create Cluster
+
+```bash
+kind create cluster --config=./kind/kindconfig.yaml
+``` 
+
+### Install Contour Ingress
+
+```bash
+kubectl apply -f ./kind/contour.yaml
+
+kubectl patch daemonsets -n projectcontour envoy -p '{"spec":{"template":{"spec":{"nodeSelector":{"ingress-ready":"true"},"tolerations":[{"key":"node-role.kubernetes.io/master","operator":"Equal","effect":"NoSchedule"}]}}}}'
+
+```
+
+
 ## GraphModels
 
 ### How to use
