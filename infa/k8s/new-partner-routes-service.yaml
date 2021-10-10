@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: new-partner-routes-service
+  name: new-partner-routes-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: new-partner-routes-service
+  template:
+    metadata:
+      labels:
+        app: new-partner-routes-service
+    spec:
+      containers:
+        - image: tcc_new_partner_routes_service:0.0.1
+          name: new-partner-routes-service
+          env:
+            - name: PARTNER_ROUTES_API
+              value: "http://partner-routes-api-service:8000"
+            - name: KAFKA_CONSUMER_GROUP
+              value: "new_route_created_by_partner_active"
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "kafka-service:9092"
+            - name: KAFKA_TOPIC
+              value: "new_route_created_by_partner_active"
+            - name: POSTGRES_DB
+              value: "legacy_system"
+            - name: POSTGRES_USER
+              value: "legacy_system"
+            - name: POSTGRES_PASSWORD
+              value: "legacy_system_postgresql"
+            - name: POSTGRES_HOST
+              value: "postgres-legacy-system"
+            - name: POSTGRES_PORT
+              value: "5432"

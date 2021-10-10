@@ -15,7 +15,7 @@ spec:
         app: zpl-generate-service
     spec:
       containers:
-        - image: todotododododododododo:0.0.5
+        - image: tcc_zpl_generate_service:0.0.1
           name: zpl-generate-service
           env:
             - name: DELIVERIES_API
@@ -23,6 +23,6 @@ spec:
             - name: KAFKA_CONSUMER_GROUP
               value: "delivery_plp_process"
             - name: KAFKA_BOOTSTRAP_SERVERS
-              value: "kafka-service:19092"
+              value: "kafka-service:9092"
             - name: KAFKA_TOPIC
               value: "delivery_plp_process"
