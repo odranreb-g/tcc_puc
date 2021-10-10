@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-legacy-system-pvc
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-legacy-system-local-storage
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/k8s/legacy_system"
+    type: DirectoryOrCreate
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-legacy-system
+spec:
+  selector:
+    matchLabels:
+      app: postgres-legacy-system
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres-legacy-system
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:13
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: "legacy_system"
+            - name: POSTGRES_USER
+              value: "legacy_system"
+            - name: POSTGRES_PASSWORD
+              value: "legacy_system_postgresql"
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgresdb
+      volumes:
+        - name: postgresdb
+          persistentVolumeClaim:
+            claimName: postgres-legacy-system-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: postgres-legacy-system
+spec:
+  selector:
+    app: postgres-legacy-system
+  ports:
+    - port: 5432
+  type: ClusterIP

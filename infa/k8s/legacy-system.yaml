@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: legacy-system
+  name: legacy-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: legacy-system
+  template:
+    metadata:
+      labels:
+        app: legacy-system
+    spec:
+      containers:
+        - image: tcc_legacy_system:0.0.3
+          name: legacy-system
+          ports:
+            - containerPort: 8000
+              name: main
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "legacy_system_postgresql"
+            - name: POSTGRES_DB
+              value: "legacy_system"
+            - name: POSTGRES_USER
+              value: "legacy_system"
+            - name: POSTGRES_HOST
+              value: "postgres-legacy-system"
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "kafka-service:19092"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: legacy-system-service
+spec:
+  selector:
+    app: legacy-system
+  ports:
+    - port: 8000

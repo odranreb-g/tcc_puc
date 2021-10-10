@@ -23,4 +23,4 @@ ADD . /app/
 
 EXPOSE 8000
 
-ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:8000", "-c", "gunicorn_config.py", "--chdir", "legacy_system", "legacy_system.wsgi:application", "--graceful-timeout", "30"]
+ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:8000", "-c", "gunicorn_config.py", "--chdir", "legacy", "legacy.wsgi:application", "--graceful-timeout", "30"]
