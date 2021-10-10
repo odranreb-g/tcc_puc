@@ -35,6 +35,11 @@ kubectl patch daemonsets -n projectcontour envoy -p '{"spec":{"template":{"spec"
 
 ```
 
+## K8S
+
+### How to conect to the pod
+
+kubectl exec --stdin --tty <pod-name> -- /bin/bash
 
 ## GraphModels
 

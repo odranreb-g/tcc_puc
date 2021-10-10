@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: partner-routes-api
+  name: partner-routes-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: partner-routes-api
+  template:
+    metadata:
+      labels:
+        app: partner-routes-api
+    spec:
+      containers:
+        - image: tcc_partner_routes_api:0.0.2
+          name: partner-routes-api
+          ports:
+            - containerPort: 8000
+              name: main
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "partner_routes_api_postgresql"
+            - name: POSTGRES_DB
+              value: "partner_routes_api"
+            - name: POSTGRES_USER
+              value: "partner_routes_api"
+            - name: POSTGRES_HOST
+              value: "postgres-partner-routes-api"
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "kafka-service:19092"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: partner-routes-api-service
+spec:
+  selector:
+    app: partner-routes-api
+  ports:
+    - port: 8000

@@ -36,3 +36,19 @@ spec:
               value: "1"
             - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
               value: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-service
+  labels:
+    name: kafka
+spec:
+  ports:
+    - port: 19092
+      name: kafka-port
+      protocol: TCP
+  selector:
+    app: kafka
+    id: "0"
+  # type: LoadBalancer
