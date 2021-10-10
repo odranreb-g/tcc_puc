@@ -15,7 +15,7 @@ spec:
         app: deliveries-api
     spec:
       containers:
-        - image: tcc_deliveries_api:0.0.3
+        - image: tcc_deliveries_api:0.0.5
           name: deliveries-api
           ports:
             - containerPort: 8001
@@ -32,7 +32,7 @@ spec:
             - name: POSTGRES_PORT
               value: "5432"
             - name: KAFKA_BOOTSTRAP_SERVERS
-              value: "kafka-service:19092"
+              value: "kafka-service:9092"
 ---
 kind: Service
 apiVersion: v1

@@ -13,8 +13,6 @@ class Command(BaseCommand):
 
         for city_from in CITIES:
             for city_to in CITIES:
-                if city_from == city_to:
-                    continue
 
                 PartnerRoute.objects.create(
                     start_place=city_from,

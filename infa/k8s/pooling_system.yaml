@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pooling-system
+spec:
+  schedule: "* * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: pooling-system
+              image: tcc_pooling_system:0.0.3
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: POSTGRES_DB
+                  value: "legacy_system"
+                - name: POSTGRES_USER
+                  value: "legacy_system"
+                - name: POSTGRES_PASSWORD
+                  value: "legacy_system_postgresql"
+                - name: POSTGRES_HOST
+                  value: "postgres-legacy-system"
+                - name: POSTGRES_PORT
+                  value: "5432"
+                - name: DELIVERIES_API
+                  value: "http://deliveries-api-service:8000"
+                - name: PARTNER_ROUTES_API
+                  value: "http://partner-routes-api-service:8000"
+          restartPolicy: OnFailure

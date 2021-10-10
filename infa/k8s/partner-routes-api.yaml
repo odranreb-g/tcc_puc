@@ -15,7 +15,7 @@ spec:
         app: partner-routes-api
     spec:
       containers:
-        - image: tcc_partner_routes_api:0.0.2
+        - image: tcc_partner_routes_api:0.0.4
           name: partner-routes-api
           ports:
             - containerPort: 8000
@@ -32,7 +32,7 @@ spec:
             - name: POSTGRES_PORT
               value: "5432"
             - name: KAFKA_BOOTSTRAP_SERVERS
-              value: "kafka-service:19092"
+              value: "kafka-service:9092"
 ---
 kind: Service
 apiVersion: v1

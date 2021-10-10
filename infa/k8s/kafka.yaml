@@ -27,7 +27,7 @@ spec:
             - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
               value: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
             - name: KAFKA_ADVERTISED_LISTENERS
-              value: PLAINTEXT://kafka1:9092,PLAINTEXT_HOST://localhost:19092
+              value: PLAINTEXT://kafka-service:9092
             - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
               value: "1"
             - name: KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS
@@ -45,7 +45,7 @@ metadata:
     name: kafka
 spec:
   ports:
-    - port: 19092
+    - port: 9092
       name: kafka-port
       protocol: TCP
   selector:

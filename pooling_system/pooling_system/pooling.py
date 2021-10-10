@@ -35,7 +35,9 @@ class PoolingBase(ABC):
         try:
             logger.info(f"Pooling {self.__class__.__name__.lower()}")
             last_date = self.get_last_entity()
+            logger.info(f"Pooling {self.__class__.__name__.lower()}: last_date{last_date}")
             objs = self.get_data_from_database(last_date)
+            logger.info(f"Pooling {self.__class__.__name__.lower()}: objs{objs}")
             self.send_to_new_api(objs)
         except requests.exceptions.ConnectionError as error:
             logger.error(f"Error {error!r}")
@@ -111,12 +113,10 @@ class PoolingExecuter:
 
     def process(self):
         self._poolings = [pooling(self._session_maker) for pooling in self._poolings]
-        while True:
-            try:
-                print("starting pooling")
-                for pooling in self._poolings:
-                    pooling.process()
-                print("finished pooling")
-                time.sleep(10)
-            except json.decoder.JSONDecodeError as error:
-                logger.error(f"error {error}")
+        try:
+            logger.info("starting pooling")
+            for pooling in self._poolings:
+                pooling.process()
+            logger.info("finished pooling")
+        except json.decoder.JSONDecodeError as error:
+            logger.error(f"error {error}")

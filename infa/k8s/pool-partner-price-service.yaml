@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: pool-partner-price-service
+  name: pool-partner-price-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pool-partner-price-service
+  template:
+    metadata:
+      labels:
+        app: pool-partner-price-service
+    spec:
+      containers:
+        - image: tcc_pool_partner_price_service:0.0.1
+          name: pool-partner-price-service
+          env:
+            - name: DELIVERIES_API
+              value: "http://deliveries-api-service:8000"
+            - name: PARTNER_ROUTES_API
+              value: "http://partner-routes-api-service:8000"
+            - name: POSTGRES_PASSWORD
+              value: "legacy_system_postgresql"
+            - name: POSTGRES_DB
+              value: "legacy_system"
+            - name: POSTGRES_USER
+              value: "legacy_system"
+            - name: POSTGRES_HOST
+              value: "postgres-legacy-system"
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: KAFKA_CONSUMER_GROUP
+              value: "delivery_quotation"
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "kafka-service:9092"
+            - name: KAFKA_TOPIC
+              value: "delivery_quotation"

@@ -9,10 +9,12 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import sentry_sdk
 from pathlib import Path
 
 from prettyconf import config
+
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +29,7 @@ SECRET_KEY = "django-insecure-htr)$liwycg1o7%n1v9+=j6k42&ka!q1g1j((#l98sa7tx-e13
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -143,3 +145,10 @@ REST_FRAMEWORK = {
 GRAPH_MODELS = {
     "app_labels": ["deliveries"],
 }
+
+sentry_sdk.init(
+    dsn="https://cbeb9c2491a44550816e37dfebede129@o89421.ingest.sentry.io/6000501",
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+    send_default_pii=True,
+)

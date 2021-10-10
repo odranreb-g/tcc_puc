@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: zpl-generate-service
+  name: zpl-generate-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zpl-generate-service
+  template:
+    metadata:
+      labels:
+        app: zpl-generate-service
+    spec:
+      containers:
+        - image: todotododododododododo:0.0.5
+          name: zpl-generate-service
+          env:
+            - name: DELIVERIES_API
+              value: "http://deliveries-api-service:8000"
+            - name: KAFKA_CONSUMER_GROUP
+              value: "delivery_plp_process"
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "kafka-service:19092"
+            - name: KAFKA_TOPIC
+              value: "delivery_plp_process"

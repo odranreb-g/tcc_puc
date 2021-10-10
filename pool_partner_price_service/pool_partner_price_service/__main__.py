@@ -1,6 +1,7 @@
 import json
 import logging
 import sys
+import sentry_sdk
 
 import requests
 from kafka import KafkaConsumer
@@ -17,6 +18,11 @@ formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(messag
 handler.setFormatter(formatter)
 root.addHandler(handler)
 logger = logging.getLogger(__name__)
+
+sentry_sdk.init(
+    "https://e1fc87c1991d412aad19dc812385c9a1@o89421.ingest.sentry.io/6000492",
+    traces_sample_rate=1.0,
+)
 
 consumer = KafkaConsumer(
     config("KAFKA_TOPIC"),
