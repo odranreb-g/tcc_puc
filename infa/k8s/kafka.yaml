@@ -14,6 +14,8 @@ spec:
         app: kafka
         id: "0"
     spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
       containers:
         - name: kafka
           image: confluentinc/cp-kafka:5.4.5

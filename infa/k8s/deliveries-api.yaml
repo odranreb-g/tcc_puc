@@ -14,11 +14,14 @@ spec:
       labels:
         app: deliveries-api
     spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
       containers:
-        - image: tcc_deliveries_api:0.0.5
+        - image: tccpucbernardogomes.azurecr.io/tcc_deliveries_api:0.0.6
+          # - image: tcc_deliveries_api:0.0.6
           name: deliveries-api
           ports:
-            - containerPort: 8001
+            - containerPort: 8000
               name: deliveries-api
           env:
             - name: POSTGRES_PASSWORD
@@ -38,7 +41,10 @@ kind: Service
 apiVersion: v1
 metadata:
   name: deliveries-api-service
+  annotations:
+    prometheus.io/scrape: "true"
 spec:
+  type: LoadBalancer
   selector:
     app: deliveries-api
   ports:

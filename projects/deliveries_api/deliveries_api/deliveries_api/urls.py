@@ -52,5 +52,6 @@ for prefix in ["", "deliveries-api/"]:
             ),
             path(f"{prefix}redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
             path(f"{prefix}", include(router.urls)),
+            path("", include("django_prometheus.urls")),
         ]
     )
