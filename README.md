@@ -24,7 +24,7 @@ sudo mv ./kind /usr/local/bin/kind
 
 ```bash
 kind create cluster --config=./kind/kindconfig.yaml
-``` 
+```
 
 ### Install Contour Ingress
 
@@ -37,8 +37,8 @@ kubectl patch daemonsets -n projectcontour envoy -p '{"spec":{"template":{"spec"
 
 ### Kind build and load images
 
- docker build . -t tcc_deliveries_api:0.0.6
- kind load docker-image tcc_deliveries_api:0.0.6
+docker build . -t tcc_deliveries_api:0.0.6
+kind load docker-image tcc_deliveries_api:0.0.6
 
 docker build . -t tcc_partner_routes_api:0.0.5
 kind load docker-image tcc_partner_routes_api:0.0.5
@@ -57,6 +57,12 @@ kind load docker-image tcc_pool_partner_price_service:0.0.1
 
 docker build . -t tcc_zpl_generate_service:0.0.1
 kind load docker-image tcc_zpl_generate_service:0.0.1
+
+### Migrate databases
+
+kubectl exec --stdin --tty pod/partner-routes-api-677f9c8559-q96qw -- partner_routes_api/manage.py migrate
+kubectl exec --stdin --tty pod/deliveries-api-69fcfcf487-psrd2 -- deliveries_api/manage.py migrate
+kubectl exec --stdin --tty pod/legacy-system-64d699b8fd-7txqx -- legacy/manage.py migrate
 
 ## K8S
 
