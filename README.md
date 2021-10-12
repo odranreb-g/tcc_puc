@@ -35,6 +35,29 @@ kubectl patch daemonsets -n projectcontour envoy -p '{"spec":{"template":{"spec"
 
 ```
 
+### Kind build and load images
+
+ docker build . -t tcc_deliveries_api:0.0.6
+ kind load docker-image tcc_deliveries_api:0.0.6
+
+docker build . -t tcc_partner_routes_api:0.0.5
+kind load docker-image tcc_partner_routes_api:0.0.5
+
+docker build . -t tcc_legacy_system:0.0.4
+kind load docker-image tcc_legacy_system:0.0.4
+
+docker build . -t tcc_pooling_system:0.0.3
+kind load docker-image tcc_pooling_system:0.0.3
+
+docker build . -t tcc_new_partner_routes_service:0.0.1
+kind load docker-image tcc_new_partner_routes_service:0.0.1
+
+docker build . -t tcc_pool_partner_price_service:0.0.1
+kind load docker-image tcc_pool_partner_price_service:0.0.1
+
+docker build . -t tcc_zpl_generate_service:0.0.1
+kind load docker-image tcc_zpl_generate_service:0.0.1
+
 ## K8S
 
 ### How to conect to the pod

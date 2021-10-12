@@ -2,44 +2,45 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: partner-routes-api
-  name: partner-routes-api
+    app: legacy-system
+  name: legacy-system
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: partner-routes-api
+      app: legacy-system
   template:
     metadata:
       labels:
-        app: partner-routes-api
+        app: legacy-system
     spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
       containers:
-        - image: tcc_partner_routes_api:0.0.4
-          name: partner-routes-api
+        - image: tccpucbernardogomes.azurecr.io/tcc_legacy_system:0.0.4
+          # - image: tcc_legacy_system:0.0.4
+          name: legacy-system
           ports:
             - containerPort: 8000
               name: main
           env:
             - name: POSTGRES_PASSWORD
-              value: "partner_routes_api_postgresql"
+              value: "legacy_system_postgresql"
             - name: POSTGRES_DB
-              value: "partner_routes_api"
+              value: "legacy_system"
             - name: POSTGRES_USER
-              value: "partner_routes_api"
+              value: "legacy_system"
             - name: POSTGRES_HOST
-              value: "postgres-partner-routes-api"
+              value: "postgres-legacy-system"
             - name: POSTGRES_PORT
               value: "5432"
-            - name: KAFKA_BOOTSTRAP_SERVERS
-              value: "kafka-service:9092"
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name: partner-routes-api-service
+  name: legacy-system-service
 spec:
   selector:
-    app: partner-routes-api
+    app: legacy-system
   ports:
     - port: 8000

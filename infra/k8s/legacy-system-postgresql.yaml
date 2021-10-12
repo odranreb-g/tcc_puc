@@ -38,6 +38,8 @@ spec:
       labels:
         app: postgres-legacy-system
     spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
       containers:
         - name: postgres
           image: postgres:13
