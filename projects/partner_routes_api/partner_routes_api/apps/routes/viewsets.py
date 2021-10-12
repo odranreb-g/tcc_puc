@@ -12,7 +12,7 @@ class RouteFilter(filters.FilterSet):
 
     class Meta:
         model = Route
-        fields = ["start_place", "finish_place"]
+        fields = ["start_place", "finish_place", "partner_id"]
 
 
 class RouteViewSet(viewsets.ModelViewSet):

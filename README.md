@@ -74,7 +74,7 @@ cd -
 
 ### Migrate databases
 
-kubectl exec --stdin --tty pod/partner-routes-api-76d6ff669c-7gwnj -- partner_routes_api/manage.py migrate
+kubectl exec --stdin --tty $(kubectl get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=partner-routes-api)-- partner_routes_api/manage.py migrate
 kubectl exec --stdin --tty pod/deliveries-api-69fcfcf487-5jtdz -- deliveries_api/manage.py migrate
 kubectl exec --stdin --tty pod/legacy-system-67cbf489db-c6zzq -- legacy/manage.py migrate
 
