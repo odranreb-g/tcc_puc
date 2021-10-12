@@ -10,8 +10,8 @@ build_and_load_images:
 	cd -
 
 	cd projects/partner_routes_api && \
-	docker build . -t tcc_partner_routes_api:0.0.5 && \
-	kind load docker-image tcc_partner_routes_api:0.0.5 && \
+	docker build . -t tcc_partner_routes_api:0.0.6 && \
+	kind load docker-image tcc_partner_routes_api:0.0.6 && \
 	cd -
 
 	cd projects/legacy_system && \
