@@ -17,12 +17,16 @@ SESSION_MAKER = sessionmaker(bind=engine)
 
 class PoolPartnerPriceHandler:
     def _get_delivery(self, delivery_uuid):
-        return requests.get(f"{config('DELIVERIES_API')}/deliveries/{delivery_uuid}/").json()
+        return requests.get(
+            f"{config('DELIVERIES_API')}/deliveries/{delivery_uuid}/",
+            headers={"Content-Type": "application/json", "Authorization": config("API_TOKEN")},
+        ).json()
 
     def _get_routes(self, delivery):
         return requests.get(
             f"{config('PARTNER_ROUTES_API')}/routes/?start_place={delivery.get('sender_city')}"
-            f"&finish_place={delivery.get('receiver_city')}"
+            f"&finish_place={delivery.get('receiver_city')}",
+            headers={"Content-Type": "application/json", "Authorization": config("API_TOKEN")},
         ).json()["results"]
 
     def _get_min_route(self, routes):
@@ -32,7 +36,7 @@ class PoolPartnerPriceHandler:
         response = requests.patch(
             f"{config('DELIVERIES_API')}/deliveries/{delivery_uuid}/",
             data=json.dumps({"partner_route_id": route_uuid, "freight_price": price}),
-            headers={"Content-Type": "application/json"},
+            headers={"Content-Type": "application/json", "Authorization": config("API_TOKEN")},
         )
 
         if response.status_code == HTTPStatus.OK:

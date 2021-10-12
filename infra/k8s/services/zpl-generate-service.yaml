@@ -27,3 +27,5 @@ spec:
               value: "kafka-service:9092"
             - name: KAFKA_TOPIC
               value: "delivery_plp_process"
+            - name: API_TOKEN
+              value: "Token PUC_ZPL_GENERATE_SERVICE"

@@ -39,3 +39,5 @@ spec:
               value: "kafka-service:9092"
             - name: KAFKA_TOPIC
               value: "delivery_quotation"
+            - name: API_TOKEN
+              value: "Token PUC_POOL_PARTNER_PRICE_SERVICE"

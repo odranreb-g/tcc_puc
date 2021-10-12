@@ -28,4 +28,7 @@ spec:
                   value: "http://deliveries-api-service:8000"
                 - name: PARTNER_ROUTES_API
                   value: "http://partner-routes-api-service:8000"
+                - name: API_TOKEN
+                  value: "Token PUC_POOLING_SYSTEM"
+
           restartPolicy: OnFailure

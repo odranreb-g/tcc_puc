@@ -19,7 +19,7 @@ class NewPartnerRoutesHandler:
     def _delete_new_partner_route(self, new_route_uuid):
         response = requests.delete(
             f"{config('PARTNER_ROUTES_API')}/new-routes/{new_route_uuid}/",
-            headers={"Content-Type": "application/json"},
+            headers={"Content-Type": "application/json", "Authorization": config("API_TOKEN")},
         )
 
         if response.status_code == HTTPStatus.NO_CONTENT:

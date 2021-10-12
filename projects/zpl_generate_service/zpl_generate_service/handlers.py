@@ -19,7 +19,7 @@ class ZPLGeneratorHandler:
         response = requests.patch(
             url,
             data=json.dumps({"zpl": {"url": path}, "status": "ANOTHER_PROCESS"}),
-            headers={"Content-Type": "application/json"},
+            headers={"Content-Type": "application/json", "Authorization": config("API_TOKEN")},
         )
 
         if response.status_code == HTTPStatus.OK:
@@ -30,7 +30,9 @@ class ZPLGeneratorHandler:
 
     def _get_delivery(self, uuid):
         url = f"{config('DELIVERIES_API')}/deliveries/{uuid}/"
-        return requests.get(url, headers={"Content-Type": "application/json"}).json()
+        return requests.get(
+            url, headers={"Content-Type": "application/json", "Authorization": config("API_TOKEN")}
+        ).json()
 
     def process(self, uuid):
         delivery = self._get_delivery(uuid)

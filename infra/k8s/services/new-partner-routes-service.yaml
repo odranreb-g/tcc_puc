@@ -37,3 +37,5 @@ spec:
               value: "postgres-legacy-system"
             - name: POSTGRES_PORT
               value: "5432"
+            - name: API_TOKEN
+              value: "Token PUC_NEW_PARTNER_ROUTES_SERVICE"

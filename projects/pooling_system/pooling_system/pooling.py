@@ -1,6 +1,5 @@
 import json
 import logging
-import time
 from abc import ABC, abstractmethod
 from http import HTTPStatus
 
@@ -45,12 +44,16 @@ class PoolingBase(ABC):
     def send_to_new_api(self, objs):
         for index, obj in enumerate(objs):
             if obj.created == obj.modified:
-                response = requests.post(self.URL, data=obj.to_dict(), headers={"x-pooling-system": "true"})
+                response = requests.post(
+                    self.URL,
+                    data=obj.to_dict(),
+                    headers={"x-pooling-system": "true", "Authorization": config("API_TOKEN")},
+                )
             else:
                 response = requests.patch(
                     f"{self.URL}{obj.id}/",
                     data=obj.to_dict(),
-                    headers={"x-pooling-system": "True"},
+                    headers={"x-pooling-system": "True", "Authorization": config("API_TOKEN")},
                 )
 
             if response.status_code in [HTTPStatus.CREATED, HTTPStatus.OK]:
@@ -66,6 +69,7 @@ class DeliveriesPooling(PoolingBase):
         response = requests.get(
             self.URL,
             params={"ordering": "-delivery_entry_modified", "limit": 1},
+            headers={"Authorization": config("API_TOKEN")},
         ).json()
 
         if response["results"]:
@@ -90,6 +94,7 @@ class PartnerRoutesPooling(PoolingBase):
         response = requests.get(
             self.URL,
             params={"ordering": "-route_entry_modified", "limit": 1},
+            headers={"Authorization": config("API_TOKEN")},
         ).json()
 
         if response["results"]:
