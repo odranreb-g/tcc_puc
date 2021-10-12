@@ -44,7 +44,7 @@ metadata:
   annotations:
     prometheus.io/scrape: "true"
 spec:
-  type: LoadBalancer
+  # type: LoadBalancer
   selector:
     app: partner-routes-api
   ports:

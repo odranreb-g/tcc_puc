@@ -29,7 +29,7 @@ kind create cluster --config=./infra/kind/kindconfig.yaml
 ### Install Contour Ingress
 
 ```bash
-kubectl apply -f ./kind/contour.yaml
+kubectl apply -f ./infra/kind/contour.yaml
 
 kubectl patch daemonsets -n projectcontour envoy -p '{"spec":{"template":{"spec":{"nodeSelector":{"ingress-ready":"true"},"tolerations":[{"key":"node-role.kubernetes.io/master","operator":"Equal","effect":"NoSchedule"}]}}}}'
 
