@@ -3,10 +3,9 @@ kind: Deployment
 metadata:
   labels:
     app: legacy-system
-    is_tcc: "true"
   name: legacy-system
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: legacy-system
