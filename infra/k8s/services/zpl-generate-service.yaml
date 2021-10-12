@@ -16,7 +16,7 @@ spec:
         app: zpl-generate-service
     spec:
       containers:
-        - image: tcc_zpl_generate_service:0.0.1
+        - image: tcc_zpl_generate_service:0.0.2
           name: zpl-generate-service
           env:
             - name: DELIVERIES_API

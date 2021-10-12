@@ -16,7 +16,7 @@ spec:
         app: new-partner-routes-service
     spec:
       containers:
-        - image: tcc_new_partner_routes_service:0.0.1
+        - image: tcc_new_partner_routes_service:0.0.2
           name: new-partner-routes-service
           env:
             - name: PARTNER_ROUTES_API

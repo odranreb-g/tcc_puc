@@ -16,7 +16,7 @@ spec:
         app: pool-partner-price-service
     spec:
       containers:
-        - image: tcc_pool_partner_price_service:0.0.1
+        - image: tcc_pool_partner_price_service:0.0.2
           name: pool-partner-price-service
           env:
             - name: DELIVERIES_API

@@ -18,7 +18,7 @@ spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
       containers:
-        - image: tcc_deliveries_api:0.0.7
+        - image: tcc_deliveries_api:0.0.8
           name: deliveries-api
           ports:
             - containerPort: 8000
