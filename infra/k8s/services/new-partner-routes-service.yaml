@@ -6,7 +6,7 @@ metadata:
     is_tcc: "true"    
   name: new-partner-routes-service
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: new-partner-routes-service

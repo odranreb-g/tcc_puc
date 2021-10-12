@@ -6,7 +6,7 @@ metadata:
     is_tcc: "true"    
   name: pool-partner-price-service
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: pool-partner-price-service
