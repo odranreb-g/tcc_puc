@@ -17,8 +17,7 @@ spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
       containers:
-        - image: tccpucbernardogomes.azurecr.io/tcc_partner_routes_api:0.0.5
-          # - image: tcc_partner_routes_api:0.0.5
+        - image: tcc_partner_routes_api:0.0.5
           name: partner-routes-api
           ports:
             - containerPort: 8000
