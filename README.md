@@ -23,7 +23,7 @@ sudo mv ./kind /usr/local/bin/kind
 ### Create Cluster
 
 ```bash
-kind create cluster --config=./kind/kindconfig.yaml
+kind create cluster --config=./infra/kind/kindconfig.yaml
 ```
 
 ### Install Contour Ingress
@@ -37,32 +37,50 @@ kubectl patch daemonsets -n projectcontour envoy -p '{"spec":{"template":{"spec"
 
 ### Kind build and load images
 
-docker build . -t tcc_deliveries_api:0.0.6
-kind load docker-image tcc_deliveries_api:0.0.6
+cd projects/deliveries_api && \
+ docker build . -t tcc_deliveries_api:0.0.6 && \
+ kind load docker-image tcc_deliveries_api:0.0.6 && \
+ cd -
 
-docker build . -t tcc_partner_routes_api:0.0.5
-kind load docker-image tcc_partner_routes_api:0.0.5
+cd projects/partner_routes_api && \
+docker build . -t tcc_partner_routes_api:0.0.5 && \
+kind load docker-image tcc_partner_routes_api:0.0.5 && \
+cd -
 
-docker build . -t tcc_legacy_system:0.0.4
-kind load docker-image tcc_legacy_system:0.0.4
+cd projects/legacy_system && \
+ docker build . -t tcc_legacy_system:0.0.4 && \
+ kind load docker-image tcc_legacy_system:0.0.4 && \
+ cd -
 
-docker build . -t tcc_pooling_system:0.0.3
-kind load docker-image tcc_pooling_system:0.0.3
+cd projects/pooling_system && \
+docker build . -t tcc_pooling_system:0.0.3 && \
+kind load docker-image tcc_pooling_system:0.0.3 && \
+cd -
 
-docker build . -t tcc_new_partner_routes_service:0.0.1
-kind load docker-image tcc_new_partner_routes_service:0.0.1
+cd projects/new_partner_routes_service && \
+docker build . -t tcc_new_partner_routes_service:0.0.1 && \
+kind load docker-image tcc_new_partner_routes_service:0.0.1 && \
+cd -
 
-docker build . -t tcc_pool_partner_price_service:0.0.1
-kind load docker-image tcc_pool_partner_price_service:0.0.1
+cd projects/pool_partner_price_service && \
+docker build . -t tcc_pool_partner_price_service:0.0.1 && \
+kind load docker-image tcc_pool_partner_price_service:0.0.1 && \
+cd -
 
-docker build . -t tcc_zpl_generate_service:0.0.1
-kind load docker-image tcc_zpl_generate_service:0.0.1
+cd projects/zpl_generate_service && \
+docker build . -t tcc_zpl_generate_service:0.0.1 && \
+kind load docker-image tcc_zpl_generate_service:0.0.1 && \
+cd -
 
 ### Migrate databases
 
-kubectl exec --stdin --tty pod/partner-routes-api-677f9c8559-q96qw -- partner_routes_api/manage.py migrate
-kubectl exec --stdin --tty pod/deliveries-api-69fcfcf487-psrd2 -- deliveries_api/manage.py migrate
-kubectl exec --stdin --tty pod/legacy-system-64d699b8fd-7txqx -- legacy/manage.py migrate
+kubectl exec --stdin --tty pod/partner-routes-api-76d6ff669c-7gwnj -- partner_routes_api/manage.py migrate
+kubectl exec --stdin --tty pod/deliveries-api-69fcfcf487-5jtdz -- deliveries_api/manage.py migrate
+kubectl exec --stdin --tty pod/legacy-system-67cbf489db-c6zzq -- legacy/manage.py migrate
+
+### SCRIPTS
+
+kubectl exec --stdin --tty $(kubectl get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' -l app=legacy-system) -- legacy/manage.py create_partner_routes
 
 ## K8S
 

@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: zpl-generate-service
+    is_tcc: "true"    
   name: zpl-generate-service
 spec:
   replicas: 1

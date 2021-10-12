@@ -13,8 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django import urls
 from apps.deliveries import viewsets
+from django import urls
 from django.contrib import admin
 from django.urls import include, path
 from drf_yasg import openapi
@@ -52,6 +52,6 @@ for prefix in ["", "deliveries-api/"]:
             ),
             path(f"{prefix}redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
             path(f"{prefix}", include(router.urls)),
-            path("", include("django_prometheus.urls")),
+            path(f"{prefix}", include("django_prometheus.urls")),
         ]
     )

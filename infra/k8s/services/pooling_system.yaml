@@ -11,15 +11,8 @@ spec:
         spec:
           containers:
             - name: pooling-system
-              image: tccpucbernardogomes.azurecr.io/tcc_pooling_system:0.0.3
+              image: tcc_pooling_system:0.0.3
               imagePullPolicy: IfNotPresent
-              resources:
-                requests:
-                  memory: "64Mi"
-                  cpu: "200m"
-                limits:
-                  memory: "128Mi"
-                  cpu: "250m"
               env:
                 - name: POSTGRES_DB
                   value: "legacy_system"

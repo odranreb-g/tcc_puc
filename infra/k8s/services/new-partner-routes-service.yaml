@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: new-partner-routes-service
+    is_tcc: "true"    
   name: new-partner-routes-service
 spec:
   replicas: 1

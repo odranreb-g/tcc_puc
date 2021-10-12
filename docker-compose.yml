@@ -11,7 +11,7 @@ services:
     ports:
       - "15432:5432"
     volumes:
-      - ./data/legacy_system:/var/lib/postgresql/data
+      - ./data/legacy_systemto:/var/lib/postgresql/data
     networks:
       - postgres-compose-network
   deliveries-api-postgresql:

@@ -3,12 +3,14 @@ kind: Deployment
 metadata:
   labels:
     app: legacy-system
+    type: tcc
   name: legacy-system
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: legacy-system
+      type: tcc
   template:
     metadata:
       labels:
@@ -17,8 +19,7 @@ spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
       containers:
-        - image: tccpucbernardogomes.azurecr.io/tcc_legacy_system:0.0.4
-          # - image: tcc_legacy_system:0.0.4
+        - image: tcc_legacy_system:0.0.4
           name: legacy-system
           ports:
             - containerPort: 8000

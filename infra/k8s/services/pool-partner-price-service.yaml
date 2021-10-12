@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: pool-partner-price-service
+    is_tcc: "true"    
   name: pool-partner-price-service
 spec:
   replicas: 1

@@ -55,9 +55,9 @@ spec:
               value: "legacy_system_postgresql"
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: postgresdb
+              name: postgreslegacydb
       volumes:
-        - name: postgresdb
+        - name: postgreslegacydb
           persistentVolumeClaim:
             claimName: postgres-legacy-system-pvc
 ---
