@@ -34,7 +34,7 @@ spec:
             - name: POSTGRES_PORT
               value: "5432"
             - name: DELIVERIES_API
-              value: "http://127.0.0.1:8001"
+              value: "http://deliveries-api-service:8000"
             - name: API_TOKEN
               value: "Token PUC_LEGACY"
 ---
