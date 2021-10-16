@@ -35,6 +35,11 @@ class DeliveriesCreateView(CreateView):
         delivery = DeliveryFactory.build()
         return delivery.__dict__
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({"show_save_button": True})
+        return context
+
 
 class DeliveriesUpdateView(UpdateView):
     model = Delivery

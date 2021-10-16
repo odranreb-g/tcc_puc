@@ -17,7 +17,7 @@ spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
       containers:
-        - image: tcc_legacy_system:0.0.7
+        - image: tcc_legacy_system:0.0.8
           name: legacy-system
           ports:
             - containerPort: 8000
