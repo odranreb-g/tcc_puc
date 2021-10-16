@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 {% include "site/_head.html" %}
+
 <body>
 
     {% include "site/_header.html" %}
@@ -12,10 +13,25 @@
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Entregas</h1>
+                    <h1 class="h2">Rotas de parceiro</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
+                    
                         <div class="btn-group me-2">
-                            <a type="button" href="{% url 'deliveries:create' %}" class="btn btn-sm btn-outline-secondary">Cadastrar Entrega</a>
+                            <form method="get" action="{% url 'partner_routes:list' %}">
+                                <div class="input-group mx-3">
+                                    <input type="text" name="qPartner" value="{{qPartner}}" placeholder="Parceiro" class="form-control me-1"/>
+                                    <input type="text" name="qSender" value="{{qSender}}" placeholder="Remetente" class="form-control me-1"/>
+                                    <input type="text" name="qReceiver" value="{{qReceiver}}" placeholder="Destinatário" class="form-control me-1"/>
+                                    <button type="submit" class="btn btn-sm btn-outline-info">Pesquisar</button>
+                                </div>
+                                
+                            </form>
+                        </div>
+
+                    </div><div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <a type="button" href="{% url 'deliveries:create' %}" class="btn btn-sm btn-outline-secondary">Cadastrar
+                                Entrega</a>
                         </div>
                     </div>
                 </div>
@@ -24,27 +40,20 @@
                     <table class="table table-striped table-sm">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
+                                <th scope="col">Parceiro</th>
                                 <th scope="col">Remetente</th>
                                 <th scope="col">Destinatário</th>
                                 <th scope="col">Preço</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Ações</th>
                             </tr>
                         </thead>
                         
                         <tbody>
-                            {% for delivery in object_list %}
+                            {% for partner_route in object_list %}
                             <tr>
-                                <td>{{delivery.id}}</td>
-                                <td>{{delivery.sender_city}}</td>
-                                <td>{{delivery.receiver_city}}</td>
-                                <td>{% if delivery.freight_price %} {{delivery.freight_price}} {% else %} cotação não realizada {% endif %}</td>
-                                <td>{{delivery.status}}</td>
-                                <td>
-                                    <a class="btn btn-warning btn-sm" href="{% url 'deliveries:update' delivery.pk%}" role="button">Editar</a>
-                                    <a class="btn btn-info btn-sm" href="{% url 'deliveries:detail' delivery.pk%}" role="button">Detalhes</a>
-                                </td>
+                                <td>{{partner_route.partner.name}} - {{partner_route.partner.id}}</td>
+                                <td>{{partner_route.start_place}}</td>
+                                <td>{{partner_route.finish_place}}</td>
+                                <td>{{partner_route.price}}</td>
                             </tr>
                             {% endfor %}
                         </tbody>

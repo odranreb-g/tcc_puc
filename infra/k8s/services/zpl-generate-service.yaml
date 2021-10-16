@@ -29,3 +29,9 @@ spec:
               value: "delivery_plp_process"
             - name: API_TOKEN
               value: "Token PUC_ZPL_GENERATE_SERVICE"
+            - name: SAVE_ON_CLOUD
+              value: "true"
+            - name: FOLDER_NAME
+              value: "zpls-images"
+            - name: AZURE_STORAGE_CONNECTION_STRING
+              value: "DefaultEndpointsProtocol=https;AccountName=tccpucbernardogomes;AccountKey=8WQ2jlIcb/a/s4F3Uj3Ed9sxJrpSQbHcpog6vLjAsNFheQOMSwLZM0FtrwHh5n3iVy9nO9wjeYvS1NrXxNCsjQ==;EndpointSuffix=core.windows.net"

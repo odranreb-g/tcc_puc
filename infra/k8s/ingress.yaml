@@ -25,6 +25,6 @@ spec:
             path: "/"
             backend:
               service:
-                name: grafana
+                name: legacy-system
                 port:
                   number: 8000

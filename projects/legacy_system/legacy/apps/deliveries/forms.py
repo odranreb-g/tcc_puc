@@ -27,6 +27,8 @@ class DeliveryUpdateForm(ModelForm):
         fields = "__all__"
 
     def __init__(self, *args, **kwargs):
+        editable_fields = kwargs.pop("editable_fields", [])
+
         super(DeliveryUpdateForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs["class"] = "form-control"
@@ -36,5 +38,5 @@ class DeliveryUpdateForm(ModelForm):
         self.fields["partner_route"].required = False
 
         for key, field in self.fields.items():
-            if key != "status":
+            if key not in editable_fields:
                 field.disabled = True
