@@ -15,8 +15,8 @@ build_and_load_images:
 	cd -
 
 	cd projects/legacy_system && \
-	docker build . -t tcc_legacy_system:0.0.6 && \
-	kind load docker-image tcc_legacy_system:0.0.6 && \
+	docker build . -t tcc_legacy_system:0.0.7 && \
+	kind load docker-image tcc_legacy_system:0.0.7 && \
 	cd -
 
 	cd projects/pooling_system && \
